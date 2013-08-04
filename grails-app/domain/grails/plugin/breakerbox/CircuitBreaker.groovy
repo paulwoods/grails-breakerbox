@@ -11,6 +11,10 @@ class CircuitBreaker {
 	Date dateCreated
 	Date lastUpdated
 
+	static mapping = {
+		messages sort: "dateCreated", order:"desc"
+	}
+
 	static constraints = {
 		name nullable:false, blank:false, unique:true, maxSize:60
 		trigger nullable:false, min:1

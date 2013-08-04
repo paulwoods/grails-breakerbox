@@ -9,7 +9,6 @@ class Message {
 	String name
 	String trace
 	Date dateCreated
-	Date lastUpdated
 	
 	static constraints = {
 		name blank:false, maxSize: 1000
