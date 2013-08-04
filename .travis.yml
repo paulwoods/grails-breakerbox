@@ -9,3 +9,4 @@ before_script:
  - chmod +x grailsw
 
 script: ./grailsw refresh-dependencies && ./grailsw "test-app -unit"
+
