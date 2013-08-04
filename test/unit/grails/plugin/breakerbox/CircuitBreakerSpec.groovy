@@ -120,8 +120,8 @@ class CircuitBreakerSpec extends Specification {
 		cb1 == cb
 	}
 
-	private create(String name, Integer trigger=5) {
-		def cb = new CircuitBreaker(name:name,trigger:trigger).save()
+	private create(String name, Integer trigger=5, Boolean resetOnVerify=false) {
+		def cb = new CircuitBreaker(name:name,trigger:trigger, resetOnVerify:resetOnVerify).save()
 		assert cb
 		cb
 	}
@@ -373,9 +373,8 @@ class CircuitBreakerSpec extends Specification {
 
 		then:
 		CircuitBreakerException e = thrown()
-		cb1.tripped
+		!cb1.tripped
+		0 == cb1.count
 	}
 
-
 }
-

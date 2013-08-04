@@ -7,6 +7,8 @@ class CircuitBreaker {
 	String name
 	Integer trigger = 5
 	Integer count = 0
+	Boolean resetOnVerify = false
+
 	List messages
 	Date dateCreated
 	Date lastUpdated
@@ -60,6 +62,9 @@ class CircuitBreaker {
 
 	void verify() {
 		if(tripped) {
+			if(resetOnVerify)
+				reset()
+
 			throw new CircuitBreakerException("CircuitBreaker $name tripped")
 		}
 	}
