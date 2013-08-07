@@ -1,0 +1,101 @@
+
+create the breaker
+	grails create-plugin breaker
+
+add spock plugin and dependency
+
+	in buildconfig
+		add dependency: 
+			test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
+
+		add spock plugin
+			test(":spock:0.7") {
+		    	exclude "spock-grails-support"
+			}
+
+
+add the grails wrapper
+	grails wrapper
+
+
+create the domain
+	create-domain-class grails.plugin.breakerbox.CircuitBreaker
+
+
+CircuitBreakerSpec
+
+	protected code is executed
+	protected code's return value is returned
+r=5, Boolean resetOnVerify=false) {
+		private create(String name, Integer trigge
+			def cb = new CircuitBreaker(name:name,trigger:trigger, resetOnVerify:resetOnVerify).save()
+			assert cb
+			cb
+		}
+
+
+
+	save fails if name is null
+		given:
+		def cb1 = new CircuitBreaker(name:null)
+
+		expect:
+		!cb1.save()
+
+		and:
+		1 == cb1.errors.errorCount
+		"name" == cb1.errors.fieldError.field
+		"nullable" == cb1.errors.fieldError.code
+
+
+	save fails if name is blank
+	save succeeds if name is valid
+	save fails if name is duplicated
+	toString is built correctly
+	tigger cannot be null
+	minimum trigger value is 1
+	the default trigger is 5
+	created circut breakers can be fetched
+	new circuit breakers count is zero
+	when protected code throws, the count is incremented
+	new breakers are not in the tripped state
+	breaker is tripped after it throws 'trigger' number of exceptions
+	protected code stops running after it throws 'trigger' number of exceptions
+	unprotected code continues to run
+	reset resets the count
+	reset un-tripps a tripped breaker
+	verifing a un-tripped breaker does not throw
+	verifing a tripped breaker throws a circuit breaker exception
+	the circuit breaker name is part of the exception message
+	the exception is retrievable
+
+create-domain-class grails.plugin.breakerbox.Message
+
+MessageSpec
+	name can't be null
+
+		given:
+		def m1 = new Message(name:null, trace:"x")
+		cb1.addToMessages m1
+		
+		expect:
+		!cb1.save()
+
+		and:
+		1 == cb1.errors.errorCount
+		"messages[0].name" == cb1.errors.fieldError.field
+		"nullable" == cb1.errors.fieldError.code
+
+
+	name can't be blank
+	name stores 500 characters
+	trace can't be null
+	trace can't be blank
+	trace stores 50,000 characters
+	trace is trimmed to 50,000 chars
+
+CircuitBreakerSpec
+	multiple exceptions are retrievable
+	by default, breaker is not reset during verify
+	if resetOnVerify, breaker is reset during verify
+
